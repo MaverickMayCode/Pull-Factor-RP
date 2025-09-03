@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Loading - DarkRP Server</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            width: 1920px;
+            height: 1080px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 25%, #252545 50%, #1a1a3a 75%, #0f0f23 100%);
+            position: relative;
+            color: #ffffff;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 60% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            animation: bgShift 8s ease-in-out infinite;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(1deg); }
+        }
+
+        /* Floating Particles */
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #6366f1;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 30%; top: 70%; animation-delay: 1s; background: #ec4899; }
+        .particle:nth-child(3) { left: 60%; top: 15%; animation-delay: 2s; background: #10b981; }
+        .particle:nth-child(4) { left: 80%; top: 60%; animation-delay: 3s; background: #f59e0b; }
+        .particle:nth-child(5) { left: 90%; top: 30%; animation-delay: 4s; }
+        .particle:nth-child(6) { left: 15%; top: 80%; animation-delay: 5s; background: #ef4444; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); opacity: 0.6; }
+            50% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+        }
+
+        /* Main Container */
+        .container {
+            display: grid;
+            grid-template-areas: 
+                "header header header"
+                "left center right"
+                "footer footer footer";
+            grid-template-rows: 200px 1fr 120px;
+            grid-template-columns: 1fr 2fr 1fr;
+            height: 100vh;
+            padding: 40px;
+            gap: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Header */
+        .header {
+            grid-area: header;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo {
+            font-size: 4.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 30%, #f093fb 60%, #f5576c 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            text-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.3)); }
+            to { filter: drop-shadow(0 0 30px rgba(236, 72, 153, 0.5)); }
+        }
+
+        .tagline {
+            font-size: 1.8rem;
+            color: #a1a1aa;
+            font-weight: 300;
+            animation: slideIn 1s ease-out 0.5s both;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Left Panel */
+        .left-panel {
+            grid-area: left;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Center Panel */
+        .center-panel {
+            grid-area: center;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Right Panel */
+        .right-panel {
+            grid-area: right;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Card Styles */
+        .card {
+            background: rgba(37, 37, 69, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #6366f1, #ec4899);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .card.green::before { background: linear-gradient(90deg, #10b981, #34d399); }
+        .card.blue::before { background: linear-gradient(90deg, #3b82f6, #06b6d4); }
+        .card.orange::before { background: linear-gradient(90deg, #f59e0b, #f97316); }
+        .card.red::before { background: linear-gradient(90deg, #ef4444, #f87171); }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .card-icon {
+            font-size: 1.8rem;
+            margin-right: 12px;
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .card p, .card li {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: #d1d5db;
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .card li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .card li::before {
+            content: "▶";
+            color: #10b981;
+            font-size: 0.8rem;
+            position: absolute;
+            left: 0;
+            top: 2px;
+        }
+
+        .command {
+            font-family: 'Courier New', monospace;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        .footer {
+            grid-area: footer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 15, 35, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .server-info {
+            display: flex;
+            gap: 40px;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-label {
+            font-size: 0.9rem;
+            color: #9ca3af;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #10b981;
+        }
+
+        .loading-section {
+            text-align: right;
+        }
+
+        .loading-text {
+            font-size: 1.2rem;
+            color: #6366f1;
+            margin-bottom: 10px;
+        }
+
+        .loading-bar {
+            width: 200px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #ec4899);
+            border-radius: 3px;
+            animation: loading 2s ease-in-out infinite;
+        }
+
+        @keyframes loading {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        /* Compact Lists */
+        .compact-list li {
+            margin-bottom: 4px;
+            font-size: 0.85rem;
+        }
+
+        /* Two Column Layout for Commands */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .two-column .card {
+            padding: 15px;
+        }
+
+        .two-column .card h3 {
+            font-size: 1.1rem;
+        }
+
+        .two-column .card li {
+            font-size: 0.8rem;
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <!-- Floating Particles -->
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">🎯 YOU'RE IN CHARGE HERE</div>
+            <div class="tagline">True DarkRP Freedom - Your Actions, Your Consequences</div>
+        </div>
+
+        <!-- Left Panel -->
+        <div class="left-panel">
+            <div class="card green">
+                <div class="card-header">
+                    <div class="card-icon">🗳️</div>
+                    <h3>COMMUNITY TOOLS</h3>
+                </div>
+                <ul class="compact-list">
+                    <li><span class="command">/demote</span> - Boot bad actors from jobs</li>
+                    <li><span class="command">/votekick</span> - Vote out disruptive players</li>
+                    <li><span class="command">/voteban</span> - Ban repeat troublemakers</li>
+                </ul>
+            </div>
+
+            <div class="card blue">
+                <div class="card-header">
+                    <div class="card-icon">🚔</div>
+                    <h3>CRIME TRACKER</h3>
+                </div>
+                <ul class="compact-list">
+                    <li>Police use Crime Scanners</li>
+                    <li>Earn CP Points for arrests</li>
+                    <li>Buy gear with points</li>
+                    <li>No random arrests!</li>
+                </ul>
+            </div>
+
+            <div class="card orange">
+                <div class="card-header">
+                    <div class="card-icon">💻</div>
+                    <h3>HACKING SYSTEM</h3>
+                </div>
+                <ul class="compact-list">
+                    <li>Interactive cyber warfare</li>
+                    <li>Reach Tier 3 for max profit</li>
+                    <li>Multiple income streams</li>
+                    <li>High risk, high reward</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Center Panel -->
+        <div class="center-panel">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">📋</div>
+                    <h3>WHAT MAKES US DIFFERENT</h3>
+                </div>
+                <ul>
+                    <li>No advert requirements - raids auto-announce</li>
+                    <li>No FearRP - choose your response, face consequences</li>
+                    <li>No job restrictions - be creative, community handles bad actors</li>
+                    <li>No strict RDM rules - conflicts happen, major abuse gets banned</li>
+                    <li>No NLR - come back and fight, just don't mass RDM</li>
+                </ul>
+            </div>
+
+            <div class="two-column">
+                <div class="card blue">
+                    <div class="card-header">
+                        <div class="card-icon">🔧</div>
+                        <h3>SCRAP SYSTEM</h3>
+                    </div>
+                    <ul class="compact-list">
+                        <li>Universal currency system</li>
+                        <li>Trade for weapons & money</li>
+                        <li>Available to ALL players</li>
+                        <li>Perfect for new players</li>
+                    </ul>
+                </div>
+
+                <div class="card green">
+                    <div class="card-header">
+                        <div class="card-icon">🎮</div>
+                        <h3>QUICK START</h3>
+                    </div>
+                    <ul class="compact-list">
+                        <li>Collect scrap around map</li>
+                        <li>Visit Scrap Dealer</li>
+                        <li>Try Hacking System</li>
+                        <li>Use community tools!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="right-panel">
+            <div class="card red">
+                <div class="card-header">
+                    <div class="card-icon">📞</div>
+                    <h3>ADMIN INTERVENTION</h3>
+                </div>
+                <ul class="compact-list">
+                    <li>Technical issues & exploits</li>
+                    <li>System abuse</li>
+                    <li>External harassment</li>
+                    <li><strong>Everything else? That's on YOU!</strong></li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">💡</div>
+                    <h3>KEY COMMANDS</h3>
+                </div>
+                <ul class="compact-list">
+                    <li><span class="command">/scrap</span> - Check scrap amount</li>
+                    <li><span class="command">F4</span> - Job/shop menu</li>
+                    <li><span class="command">/demote [name]</span> - Remove from job</li>
+                    <li><span class="command">/votekick [name]</span> - Vote to kick</li>
+                </ul>
+            </div>
+
+            <div class="card orange">
+                <div class="card-header">
+                    <div class="card-icon">🛠️</div>
+                    <h3>HOW IT WORKS</h3>
+                </div>
+                <ul class="compact-list">
+                    <li>Bad dealer? <span class="command">/demote</span> - 30 seconds</li>
+                    <li>Mass RDMer? Community votes</li>
+                    <li>Props cost $25 - prevents spam</li>
+                    <li>Your voice matters most!</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="server-info">
+                <div class="info-item">
+                    <div class="info-label">SERVER</div>
+                    <div class="info-value">DarkRP Freedom</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">GAMEMODE</div>
+                    <div class="info-value">DarkRP</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">MAP</div>
+                    <div class="info-value">rp_downtown_v4c</div>
+                </div>
+            </div>
+            
+            <div class="loading-section">
+                <div class="loading-text">Loading Your Freedom...</div>
+                <div class="loading-bar">
+                    <div class="loading-progress"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add some dynamic loading text
+        const loadingTexts = [
+            "Loading Your Freedom...",
+            "Preparing Community Tools...",
+            "Initializing Crime Tracker...",
+            "Setting Up Hacking Systems...",
+            "Calibrating Scrap Dealers...",
+            "Welcome to True DarkRP!"
+        ];
+
+        let textIndex = 0;
+        const loadingTextElement = document.querySelector('.loading-text');
+
+        setInterval(() => {
+            textIndex = (textIndex + 1) % loadingTexts.length;
+            loadingTextElement.textContent = loadingTexts[textIndex];
+        }, 2000);
+
+        // Dynamic particle colors
+        const particles = document.querySelectorAll('.particle');
+        setInterval(() => {
+            particles.forEach(particle => {
+                const colors = ['#6366f1', '#ec4899', '#10b981', '#f59e0b', '#ef4444'];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+            });
+        }, 3000);
+    </script>
+</body>
+</html>
